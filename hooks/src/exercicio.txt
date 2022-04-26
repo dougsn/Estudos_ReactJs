@@ -1,0 +1,86 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 - Criar as states de tarefas e do input;
+
+2 - Criar o ciclo de vida dos estados com useEffect()
+
+3 - Criar a função responsável pelo click no botão, que modifica as states de tarefas e input.
+
+4 - Criar o length de tarefas, com o useMemo().
+
+5 (Pode começar por esse) - Criar o retorno da renderização, com os valores da tarefa e com o input e btn, para acrescentar tarefas.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const [tarefas, setTarefas] = useState([]);
+
+const [input, setInput] = useState("");
+
+useEffect(() => {
+    const tarefasStorage = localStorage.getItem("tarefas");
+    if (tarefasStorage) {
+      setTarefas(JSON.parse(tarefasStorage));
+    }
+  }, []);
+
+
+useEffect(() => {
+    localStorage.setItem("tarefas", JSON.stringify(tarefas));
+}, [tarefas]);
+
+const handleAdd = useCallback(() => {
+    setTarefas([...tarefas, input]);
+    setInput("");
+}, [input, tarefas]);
+
+const totalTarefas = useMemo(() => tarefas.length, [tarefas]);
+
+<ul>
+    {tarefas.map((tarefa) => (
+        <li key={tarefa}>{tarefa}</li>
+    ))}
+</ul>
+<strong>Você tem {totalTarefas} tarefas</strong>
+{/* Criando um input para pegar o e.target.value para jogar no setInput (estado do input) */}
+    <br></br>
+<input
+    type="text"
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+></input>
+<button type="button" onClick={handleAdd}>
+    Criar Tarefa
+</button>
