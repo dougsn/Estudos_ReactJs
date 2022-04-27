@@ -1,12 +1,4 @@
-<<<<<<< HEAD
 
-export default function Home() {
-  return (
-    <div>Bem vindo a página HOME !</div>
-  );
-}
-
-=======
 import { Link }  from "react-router-dom"
 
 
@@ -22,4 +14,3 @@ export default function Home() {
     </div>
   );
 }
->>>>>>> 3c6e54d0ff22979d0e8409237f98dfe6924167ea
