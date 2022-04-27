@@ -1,12 +1,18 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 export default function Header() {
-    return (
-        <header>
-            <h2>Header da página</h2>
-            <Link to="/">Home</Link><br></br>
-            <Link to="/contato">Contato</Link><br></br>
-            <Link to="/sobre">Sobre</Link>
-        </header>
-    )
+  return (
+    <div>
+      <header>
+        <h2>Header da Página</h2>
+      </header>
+
+      <Link to="/">Home</Link>
+      <br></br>
+      <Link to="/contato">Contato</Link>
+      <br></br>
+      <Link to="/sobre">Sobre</Link>
+      <br></br>
+    </div>
+  );
 }

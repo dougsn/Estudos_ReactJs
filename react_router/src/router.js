@@ -1,20 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Sobre from "./pages/Sobre";
-import Contato from "./pages/Contato";
+import Home from "./components/Home";
 import Header from "./components/Header";
-import Produto from "./pages/Produto"
-import Erro from "./pages/Erro";
+import Contato from "./components/Contato";
+import Sobre from "./components/Sobre";
+import Produto from "./components/Produto";
+import Erro from "./components/Erro";
+
 const Router = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/sobre" element={<Sobre />} />
-        <Route exact path="/contato" element={<Contato />} />
-        <Route path="/produto/:id" element={<Produto />} />
-        <Route path="*" element={<Erro />} />
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/contato" element={<Contato />}></Route>
+        <Route path="/sobre" element={<Sobre />}></Route>
+        <Route path="/produto/:id" element={<Produto />}></Route>
+        <Route path="*" element={<Erro />}></Route>
       </Routes>
     </BrowserRouter>
   );
