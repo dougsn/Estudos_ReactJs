@@ -13,10 +13,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-if(!firebase){
+if(!firebase.apps.length){ // Verificando se há alguma conexão, se não estiver, faça, se tiver, não faça outra conexão.
     firebase.initializeApp(firebaseConfig);
 }
 
 
 
 export default firebase;
+
+// Cloud Firestore: Local para criar o banco de dados (No-sql), como se fosse chave e valor.
+
+// Depois de criar o banco de dados, podemos começar a criar a estrutura do nosso banco de dados.
+
+// @@ A COLEÇÃO é como se fosse a nossa TABELA
+// @@ O DOCUMENTO é o local aonde fica armazenado os valores da tabela. (STRINGS, NUMBER, BOOLEANS e etc)

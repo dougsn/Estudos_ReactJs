@@ -1,4 +1,14 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.App label {
+  margin-bottom: 20px;
+}
+
+.App input {
+  margin-bottom: 20px;
+}
