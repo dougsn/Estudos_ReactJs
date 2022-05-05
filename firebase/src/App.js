@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import firebase from './firebaseConnection'
 import { toast } from 'react-toastify'
@@ -9,6 +9,34 @@ function App() {
   const [titulo, setTitulo] = useState('')
   const [autor, setAutor] = useState('')
   const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+
+    async function loadPosts() {
+      await firebase.firestore().collection('post')
+      .onSnapshot((doc) => {
+        let meusPosts = []
+
+        doc.forEach((item) => {
+          meusPosts.push({
+            id: item.id,
+            autor: item.data().autor,
+            titulo: item.data().titulo
+          })
+        })
+        setPosts(meusPosts)
+
+      })
+      
+    }
+
+    
+    loadPosts();
+    
+    
+
+
+  }, [])
 
 
   // Se usa o async await, quando vamos consultar algo externamente na internet.
@@ -52,6 +80,7 @@ function App() {
     // })
 
     await firebase.firestore().collection('post')
+    
     .get()
     .then((snapshot) => {
       let lista = []
