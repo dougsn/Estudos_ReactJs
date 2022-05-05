@@ -8,6 +8,7 @@ function App() {
 
   const [titulo, setTitulo] = useState('')
   const [autor, setAutor] = useState('')
+  const [posts, setPosts] = useState([])
 
 
   // Se usa o async await, quando vamos consultar algo externamente na internet.
@@ -38,17 +39,38 @@ function App() {
   }
 
   async function buscaPost() {
+    // await firebase.firestore().collection('post')
+    // .doc('123')
+    // .get()
+    // .then((snapshot) => {
+    //   toast.success('Dados consultados com sucesso !')
+    //   setTitulo(snapshot.data().titulo)
+    //   setAutor(snapshot.data().autor)
+    // })
+    // .catch((err) => {
+    //   toast.warning('Gerou algum erro' + err)
+    // })
+
     await firebase.firestore().collection('post')
-    .doc('123')
     .get()
     .then((snapshot) => {
-      toast.success('Dados consultados com sucesso !')
-      setTitulo(snapshot.data().titulo)
-      setAutor(snapshot.data().autor)
+      let lista = []
+      // Tivermos que fazer um forEach para percorrer os documentos que ficam dentro da coleção do firebase
+      snapshot.forEach((doc) => {
+        lista.push({ // Aqui jogamos as informações retornadas do banco de dados e colocamos em um objeto dentro do array lista que criamos.
+          id: doc.id,
+          autor: doc.data().autor,
+          titulo: doc.data().titulo
+        })
+      })
+      setPosts(lista) // Aqui foi jogado em nossa State as informações de cada campo retornado e depois criado no array de lista
+      toast.success("Dados capturados com sucesso!")
+
     })
-    .catch((err) => {
-      toast.warning('Gerou algum erro' + err)
+    .catch((e) => {
+      toast.warning("Algo deu errado !" + e)
     })
+
 
   }
 
@@ -64,7 +86,19 @@ function App() {
       <input type="text" value={autor} onChange={(e) => setAutor(e.target.value)} />
 
       <button onClick={ handleAdd }>Cadastrar</button>
-      <button onClick={ buscaPost }>Buscar Post</button>
+      <button onClick={ buscaPost }>Buscar Post</button><br/>
+
+      <ul>
+        {posts.map((post)=> {
+          return (
+            <li key={post.id}>
+              <span>Titulo: {post.titulo}</span> <br/>
+              <span>Autor: {post.autor}</span> <br/><br/>
+            </li>
+          )
+        })}
+      </ul>
+
 
     </div>
   );
