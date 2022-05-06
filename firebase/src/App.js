@@ -6,6 +6,7 @@ import './App.css';
 
 function App() {
 
+  const [idPost, setIdPost] = useState('')
   const [titulo, setTitulo] = useState('')
   const [autor, setAutor] = useState('')
   const [posts, setPosts] = useState([])
@@ -103,10 +104,42 @@ function App() {
 
   }
 
+  async function editarPost() {
+    await firebase.firestore().collection('post')
+    .doc(idPost) // Pegando as informações da State do input da idPost
+    .update({ // Mandando atualizar no banco, nos outros usamos o .get() para buscar. 'Atualiza o titulo, pelo valor, e o autor pelo valor que foi passado abaixo.
+      titulo: titulo,
+      autor: autor
+
+    })
+    .then(() => {
+      console.log('Dados atualizados com sucesso');
+      setIdPost('')
+      setTitulo('')
+      setAutor('')
+    })
+    .catch((e) => {
+      console.log('Erro ao atualizar' + e);
+    })
+
+
+  }
+
+  async function excluirPost(id) {
+    await firebase.firestore().collection('post')
+    .doc(id) // Acessando o ID do documento que eu passei como parametro
+    .delete() // Deletando o post inteiro
+    .then(() => {
+      toast.success('Excluido com sucesso !')
+    })
+  }
 
   return (
     <div className="App">
       <h1>ReactJS + Firebase :)</h1><br/>
+
+      <label>:ID </label>
+      <input type='text' value={idPost} onChange={(e) => setIdPost(e.target.value)}/>
 
       <label>Titulo: </label>
       <textarea type="text" value={titulo} onChange={(e) => setTitulo(e.target.value)}/>
@@ -114,15 +147,18 @@ function App() {
       <label>Autor: </label>
       <input type="text" value={autor} onChange={(e) => setAutor(e.target.value)} />
 
-      <button onClick={ handleAdd }>Cadastrar</button>
+      <button onClick={ handleAdd }>Cadastrar</button><br/>
       <button onClick={ buscaPost }>Buscar Post</button><br/>
+      <button onClick={ editarPost }>Editar</button><br/>
 
       <ul>
         {posts.map((post)=> {
           return (
             <li key={post.id}>
+              <span>ID: {post.id}</span><br/>
               <span>Titulo: {post.titulo}</span> <br/>
-              <span>Autor: {post.autor}</span> <br/><br/>
+              <span>Autor: {post.autor}</span> <br/>
+              <button onClick={ () => excluirPost(post.id)} >Excluir post</button><br/><br/>
             </li>
           )
         })}
