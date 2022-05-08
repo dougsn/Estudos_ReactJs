@@ -1,175 +1,188 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import firebase from "./firebaseConnection";
 import { toast } from "react-toastify";
 import "./App.css";
 
 function App() {
-  const [idPost, setIdPost] = useState("");
-  const [titulo, setTitulo] = useState("");
-  const [autor, setAutor] = useState("");
-  const [posts, setPosts] = useState([]);
+  // const [idPost, setIdPost] = useState("");
+  // const [titulo, setTitulo] = useState("");
+  // const [autor, setAutor] = useState("");
+  // const [posts, setPosts] = useState([]);
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const [user, setUser] = useState(false);
-  const [userLogged, setuserLogged] = useState({});
+  const [nome, setNome] = useState('')
+  const [cargo, setCargo] = useState('')
 
-  useEffect(() => {
-    async function loadPosts() {
-      await firebase
-        .firestore()
-        .collection("post")
-        .onSnapshot((doc) => {
-          let meusPosts = [];
+  // const [user, setUser] = useState(false);
+  // const [userLogged, setuserLogged] = useState({});
 
-          doc.forEach((item) => {
-            meusPosts.push({
-              id: item.id,
-              autor: item.data().autor,
-              titulo: item.data().titulo,
-            });
-          });
-          setPosts(meusPosts);
-        });
-    }
+  // useEffect(() => {
+  //   async function loadPosts() {
+  //     await firebase
+  //       .firestore()
+  //       .collection("post")
+  //       .onSnapshot((doc) => {
+  //         let meusPosts = [];
 
-    loadPosts();
-  }, []);
+  //         doc.forEach((item) => {
+  //           meusPosts.push({
+  //             id: item.id,
+  //             autor: item.data().autor,
+  //             titulo: item.data().titulo,
+  //           });
+  //         });
+  //         setPosts(meusPosts);
+  //       });
+  //   }
 
-  useEffect(() => {
+  //   loadPosts();
+  // }, []);
 
-    async function checkLogin() {
-      // Verifica se já tem um login ou não, fica olhando a aplicação..
-      await firebase.auth().onAuthStateChanged((user) => {
-        if(user) {
-          // se tem usuario logado entra aqui dentro
-          setUser(true)
-          setuserLogged({ // Essas informações são reaproveitadas no HTML, para renderização de informações
-            uid: user.uid,
-            email: user.email
-          })
-        }else {
-          // não tem usuario logado
-          setUser(false)
-          setuserLogged({})
+  // useEffect(() => {
 
-        }
-      })
+  //   async function checkLogin() {
+  //     // Verifica se já tem um login ou não, fica olhando a aplicação..
+  //     await firebase.auth().onAuthStateChanged((user) => {
+  //       if(user) {
+  //         // se tem usuario logado entra aqui dentro
+  //         setUser(true)
+  //         setuserLogged({ // Essas informações são reaproveitadas no HTML, para renderização de informações
+  //           uid: user.uid,
+  //           email: user.email
+  //         })
+  //       }else {
+  //         // não tem usuario logado
+  //         setUser(false)
+  //         setuserLogged({})
 
-    } 
+  //       }
+  //     })
 
-    checkLogin();
+  //   } 
+
+  //   checkLogin();
 
 
-  }, [])
+  // }, [])
 
 
   // Se usa o async await, quando vamos consultar algo externamente na internet.
-  async function handleAdd() {
-    // Passando os parâmetros que queremos acessar. o .firestore() é o banco de dados, o .collection('nome') é a tabela, o .doc('nome') é o ID da tabela que queremos e o .set({}) são os parâmetros que queremos cadastrar, tem que se igualzinho ao que foi criado no Cloud Firestore.
+  // async function handleAdd() {
+  //   // Passando os parâmetros que queremos acessar. o .firestore() é o banco de dados, o .collection('nome') é a tabela, o .doc('nome') é o ID da tabela que queremos e o .set({}) são os parâmetros que queremos cadastrar, tem que se igualzinho ao que foi criado no Cloud Firestore.
 
-    await firebase
-      .firestore()
-      .collection("post")
-      // .doc('12345') @@ Foi comentado para fazer algo dinâmico
-      // .set({
-      //   autor: autor, // Pegando os dados do estado autor
-      //   titulo: titulo // Pegando os dados do estado titulo
+  //   await firebase
+  //     .firestore()
+  //     .collection("post")
+  //     // .doc('12345') @@ Foi comentado para fazer algo dinâmico
+  //     // .set({
+  //     //   autor: autor, // Pegando os dados do estado autor
+  //     //   titulo: titulo // Pegando os dados do estado titulo
 
-      // })
-      .add({
-        // Criando um ID do doc aleatório
-        titulo: titulo,
-        autor: autor,
-      })
-      .then(() => {
-        toast.success("Dados cadastrados com sucesso !");
-        setTitulo("");
-        setAutor("");
-      })
-      .catch((err) => {
-        toast.warning("Gerou algum erro" + err);
-      });
-  }
+  //     // })
+  //     .add({
+  //       // Criando um ID do doc aleatório
+  //       titulo: titulo,
+  //       autor: autor,
+  //     })
+  //     .then(() => {
+  //       toast.success("Dados cadastrados com sucesso !");
+  //       setTitulo("");
+  //       setAutor("");
+  //     })
+  //     .catch((err) => {
+  //       toast.warning("Gerou algum erro" + err);
+  //     });
+  // }
 
-  async function buscaPost() {
-    // await firebase.firestore().collection('post')
-    // .doc('123')
-    // .get()
-    // .then((snapshot) => {
-    //   toast.success('Dados consultados com sucesso !')
-    //   setTitulo(snapshot.data().titulo)
-    //   setAutor(snapshot.data().autor)
-    // })
-    // .catch((err) => {
-    //   toast.warning('Gerou algum erro' + err)
-    // })
+  // async function buscaPost() {
+  //   // await firebase.firestore().collection('post')
+  //   // .doc('123')
+  //   // .get()
+  //   // .then((snapshot) => {
+  //   //   toast.success('Dados consultados com sucesso !')
+  //   //   setTitulo(snapshot.data().titulo)
+  //   //   setAutor(snapshot.data().autor)
+  //   // })
+  //   // .catch((err) => {
+  //   //   toast.warning('Gerou algum erro' + err)
+  //   // })
 
-    await firebase
-      .firestore()
-      .collection("post")
+  //   await firebase
+  //     .firestore()
+  //     .collection("post")
 
-      .get()
-      .then((snapshot) => {
-        let lista = [];
-        // Tivermos que fazer um forEach para percorrer os documentos que ficam dentro da coleção do firebase
-        snapshot.forEach((doc) => {
-          lista.push({
-            // Aqui jogamos as informações retornadas do banco de dados e colocamos em um objeto dentro do array lista que criamos.
-            id: doc.id,
-            autor: doc.data().autor,
-            titulo: doc.data().titulo,
-          });
-        });
-        setPosts(lista); // Aqui foi jogado em nossa State as informações de cada campo retornado e depois criado no array de lista
-        toast.success("Dados capturados com sucesso!");
-      })
-      .catch((e) => {
-        toast.warning("Algo deu errado !" + e);
-      });
-  }
+  //     .get()
+  //     .then((snapshot) => {
+  //       let lista = [];
+  //       // Tivermos que fazer um forEach para percorrer os documentos que ficam dentro da coleção do firebase
+  //       snapshot.forEach((doc) => {
+  //         lista.push({
+  //           // Aqui jogamos as informações retornadas do banco de dados e colocamos em um objeto dentro do array lista que criamos.
+  //           id: doc.id,
+  //           autor: doc.data().autor,
+  //           titulo: doc.data().titulo,
+  //         });
+  //       });
+  //       setPosts(lista); // Aqui foi jogado em nossa State as informações de cada campo retornado e depois criado no array de lista
+  //       toast.success("Dados capturados com sucesso!");
+  //     })
+  //     .catch((e) => {
+  //       toast.warning("Algo deu errado !" + e);
+  //     });
+  // }
 
-  async function editarPost() {
-    await firebase
-      .firestore()
-      .collection("post")
-      .doc(idPost) // Pegando as informações da State do input da idPost
-      .update({
-        // Mandando atualizar no banco, nos outros usamos o .get() para buscar. 'Atualiza o titulo, pelo valor, e o autor pelo valor que foi passado abaixo.
-        titulo: titulo,
-        autor: autor,
-      })
-      .then(() => {
-        console.log("Dados atualizados com sucesso");
-        setIdPost("");
-        setTitulo("");
-        setAutor("");
-      })
-      .catch((e) => {
-        console.log("Erro ao atualizar" + e);
-      });
-  }
+  // async function editarPost() {
+  //   await firebase
+  //     .firestore()
+  //     .collection("post")
+  //     .doc(idPost) // Pegando as informações da State do input da idPost
+  //     .update({
+  //       // Mandando atualizar no banco, nos outros usamos o .get() para buscar. 'Atualiza o titulo, pelo valor, e o autor pelo valor que foi passado abaixo.
+  //       titulo: titulo,
+  //       autor: autor,
+  //     })
+  //     .then(() => {
+  //       console.log("Dados atualizados com sucesso");
+  //       setIdPost("");
+  //       setTitulo("");
+  //       setAutor("");
+  //     })
+  //     .catch((e) => {
+  //       console.log("Erro ao atualizar" + e);
+  //     });
+  // }
 
-  async function excluirPost(id) {
-    await firebase
-      .firestore()
-      .collection("post")
-      .doc(id) // Acessando o ID do documento que eu passei como parametro
-      .delete() // Deletando o post inteiro
-      .then(() => {
-        toast.success("Excluido com sucesso !");
-      });
-  }
+  // async function excluirPost(id) {
+  //   await firebase
+  //     .firestore()
+  //     .collection("post")
+  //     .doc(id) // Acessando o ID do documento que eu passei como parametro
+  //     .delete() // Deletando o post inteiro
+  //     .then(() => {
+  //       toast.success("Excluido com sucesso !");
+  //     });
+  // }
 
   async function novoUsuario() {
     // vai no serviço de autenticação e pede para criar um novo usuario e senha.. Foi importado o .auth() no arquivo de config do firebaseConnection
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, senha)
-      .then((value) => {
-        console.log(value);
+      .then( async (value) => {
+        await firebase.firestore().collection('users')
+        .doc(value.user.uid)
+        .set({
+          nome: nome,
+          cargo: cargo,
+          status: true
+        })
+        setEmail('')
+        setSenha('')
+        setNome('')
+        setCargo('')
         toast.success("Cadastrado com sucesso");
       })
       .catch((e) => {
@@ -186,29 +199,42 @@ function App() {
     await firebase.auth().signOut(); // desconectando da conta
   }
 
-  async function fazerLogin() {
-    await firebase.auth().signInWithEmailAndPassword(email, senha)
-    .then(() => {
-      toast.success("Logado com sucesso")
-    })
-    .catch((e) => {
-      toast.warning("Erro" + e)
-    })
-  }
+  // async function fazerLogin() {
+  //   await firebase.auth().signInWithEmailAndPassword(email, senha)
+  //   .then(() => {
+  //     toast.success("Logado com sucesso")
+  //   })
+  //   .catch((e) => {
+  //     toast.warning("Erro" + e)
+  //   })
+  // }
 
   return (
     <div className="App">
       <h1>ReactJS + Firebase :)</h1>
       <br />
 
-      {/* Quando o user for TRUE, renderize o que tiver abaixo */}
+      {/* Quando o user for TRUE, renderize o que tiver abaixo
       {user && ( 
         <div>
           <strong>Seja bem vindo ! (Você está logado !)</strong><br/>
-          <span>{userLogged.uid} - {userLogged.email}</span><br/><br/> {/*Reaproveitando as informações da State */}
+          <span>{userLogged.uid} - {userLogged.email}</span><br/><br/>  
         </div>
-      )}
+      )} */}
 
+      <label>Nome</label>
+      <input
+        type="text"
+        value={nome}
+        onChange={(e) => setNome(e.target.value)}
+      />
+
+      <label>Cargo</label>
+      <input
+        type="text"
+        value={cargo}
+        onChange={(e) => setCargo(e.target.value)}
+      />
 
       <label>E-mail</label>
       <input
@@ -223,14 +249,18 @@ function App() {
         value={senha}
         onChange={(e) => setSenha(e.target.value)}
       />
+      
+      
 
-      <button onClick={fazerLogin}>Fazer login</button>
+      
+
+      {/* <button onClick={fazerLogin}>Fazer login</button> */}
 
       <button onClick={novoUsuario}>Cadastrar</button>
       <br />
       <br />
       <button onClick={logout}>Sair da conta</button>
-
+{/* 
       <hr />
 
       <h2>Banco de dados:</h2>
@@ -253,16 +283,16 @@ function App() {
         type="text"
         value={autor}
         onChange={(e) => setAutor(e.target.value)}
-      />
+      /> */}
 
-      <button onClick={handleAdd}>Cadastrar</button>
+      {/* <button onClick={handleAdd}>Cadastrar</button>
       <br />
       <button onClick={buscaPost}>Buscar Post</button>
       <br />
       <button onClick={editarPost}>Editar</button>
-      <br />
+      <br /> */}
 
-      <ul>
+      {/* <ul>
         {posts.map((post) => {
           return (
             <li key={post.id}>
@@ -276,7 +306,7 @@ function App() {
             </li>
           );
         })}
-      </ul>
+      </ul> */}
     </div>
   );
 }
