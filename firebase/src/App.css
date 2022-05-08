@@ -12,3 +12,7 @@
 .App input {
   margin-bottom: 20px;
 }
+
+hr {
+  width: 100%;
+}
