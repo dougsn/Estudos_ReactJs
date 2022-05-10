@@ -16,6 +16,8 @@ function App() {
   const [nome, setNome] = useState('')
   const [cargo, setCargo] = useState('')
 
+  const [user, setUser] = useState({})
+
   // const [user, setUser] = useState(false);
   // const [userLogged, setuserLogged] = useState({});
 
@@ -197,6 +199,7 @@ function App() {
 
   async function logout() {
     await firebase.auth().signOut(); // desconectando da conta
+    setUser({})
   }
 
   // async function fazerLogin() {
@@ -208,6 +211,24 @@ function App() {
   //     toast.warning("Erro" + e)
   //   })
   // }
+
+  async function login() {
+    await firebase.auth().signInWithEmailAndPassword(email, senha)
+    .then( async (value) => {
+      await firebase.firestore().collection('users')
+      .doc(value.user.uid)
+      .get()
+      .then((snapshot) => {
+        setUser({
+          nome: snapshot.data().nome,
+          cargo: snapshot.data().cargo,
+          status: snapshot.data().status,
+          email: value.user.email
+        });
+      })
+
+    })
+  }
 
   return (
     <div className="App">
@@ -255,7 +276,8 @@ function App() {
       
 
       {/* <button onClick={fazerLogin}>Fazer login</button> */}
-
+      <button onClick={login}>Login</button>
+      <br />
       <button onClick={novoUsuario}>Cadastrar</button>
       <br />
       <br />
@@ -307,6 +329,19 @@ function App() {
           );
         })}
       </ul> */}
+      <hr/><br/>
+      {/* Verificando se o Objeto está vazio ou não para a renderização condicional. */}
+      {Object.keys(user).length > 0 && (
+        <div>
+          <strong>Olá </strong> {user.nome}<br/>
+          <strong>Cargo: </strong> {user.cargo}<br/>
+          <strong>Email: </strong> {user.email}<br/>
+          <strong>Status: </strong> {user.status ? 'Ativo' : 'Desativado'} 
+         
+        </div>
+      )}
+
+
     </div>
   );
 }
